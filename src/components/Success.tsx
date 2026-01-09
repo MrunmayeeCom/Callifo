@@ -14,6 +14,8 @@ export function Success() {
 
   const isFree = searchParams.get("free") === "true";
 
+  const DASHBOARD_URL = "https://admin-callifo.onrender.com";
+
 
   const fetchData = async () => {
 
@@ -54,19 +56,6 @@ export function Success() {
     fetchData();
   }, [transactionId]);
 
-  // Debug: Log data to see what fields are available
-  useEffect(() => {
-    if (data) {
-      console.log('Full transaction data:', data);
-      console.log('Checking payment ID fields:', {
-        id: data.id,
-        paymentId: data.paymentId,
-        razorpayPaymentId: data.razorpayPaymentId,
-        transactionId: data.transactionId,
-        payment_id: data.payment_id
-      });
-    }
-  }, [data]);
 
   if (loading) {
     return (
@@ -189,10 +178,6 @@ const totalWithGst = Math.round((baseAmount + gstAmount) * 100) / 100;
               ₹ {totalWithGst.toFixed(2)}
             </span>
           </div>
-
-          
-
-
           <div className="flex justify-between">
             <span className="text-gray-500">Next Billing</span>
             <span className="font-medium">
@@ -211,34 +196,38 @@ const totalWithGst = Math.round((baseAmount + gstAmount) * 100) / 100;
           )}
         </div>
 
-        {/* Buttons */}
-        <button
-          onClick={() => navigate("/")}
-          className="w-full bg-indigo-600 text-white py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-indigo-700 transition mb-3"
-        >
-          Start Using App
-          <ArrowRight className="w-5 h-5" />
-        </button>
+      
+          {/* Buttons */}
+{/* Action Buttons */}
+<div className="space-y-3">
+  <button
+    onClick={() => window.location.href = DASHBOARD_URL}
+    className="w-full bg-green-600 text-black py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-green-700 transition"
+  >
+    Go to Dashboard
+    <ArrowRight className="w-5 h-5" />
+  </button>
 
-        {/* Download Receipt Button - Now with better visibility */}
-        {paymentId ? (
-          <button
-            onClick={() =>
-              window.open(
-                `https://lisence-system.onrender.com/api/payment/invoice/${transactionId}`,
-                "_blank"
-              )
-            }
-            className="w-full border border-gray-300 py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-gray-50 transition"
-          >
-            <Download className="w-5 h-5" />
-            Download Receipt
-          </button>
-        ) : (
-          <p className="text-sm text-gray-400 mt-2">
-            Receipt not available
-          </p>
-        )}
+  {paymentId ? (
+    <button
+      onClick={() =>
+        window.open(
+          `https://lisence-system.onrender.com/api/payment/invoice/${transactionId}`,
+          "_blank"
+        )
+      }
+      className="w-full border border-gray-300 py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-gray-50 transition"
+    >
+      <Download className="w-5 h-5" />
+      Download Receipt
+    </button>
+  ) : (
+    <p className="text-sm text-gray-400 text-center">
+      Receipt not available
+    </p>
+  )}
+</div>
+
       </div>
     </div>
   );

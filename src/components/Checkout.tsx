@@ -209,10 +209,6 @@ const finalAmountDue =
       });
 
 
-
-      console.log("Backend returned amount:", order.amount);
-      console.log("Frontend calculated amount:", totalPrice * 100);
-
       if (!order?.orderId || !order?.key) {
         throw new Error("Invalid Razorpay order response");
       }
