@@ -461,29 +461,6 @@ const finalAmountDue =
                       </div>
                     )}
 
-
-                    {/* Trial Checkbox */}
-                    {!isFreePlan && (
-                      <div className="bg-cyan-50 rounded-lg p-3">
-                        <label className="flex items-start gap-3 cursor-pointer">
-                          <input
-                            type="checkbox"
-                            checked={useFreeTrial}
-                            onChange={(e) => setUseFreeTrial(e.target.checked)}
-                            className="mt-1 w-5 h-5 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500 cursor-pointer"
-                          />
-                          <div className="flex-1">
-                            <div className="text-gray-900">
-                              Start 14-Day Free Trial
-                            </div>
-                            <p className="text-gray-600 text-sm">
-                              No charge today. Cancel anytime during trial.
-                            </p>
-                          </div>
-                        </label>
-                      </div>
-                    )}
-
                     <div className="border-t border-gray-200 pt-3">
                       <div className="flex justify-between mb-2">
                         <span className="text-gray-900">Amount Due Today</span>
