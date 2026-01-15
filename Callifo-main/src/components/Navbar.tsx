@@ -1,6 +1,6 @@
 import { Phone, Menu, X, Download } from "lucide-react";
 import { useState } from "react";
-import logo from "../assets/Callifo_logo.png";
+import logo from "./assets/Callifo_logo.png";
 
 interface NavbarProps {
   onSignInClick: () => void;

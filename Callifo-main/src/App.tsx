@@ -23,6 +23,7 @@ import { Security } from "./components/legal/Security";
 import { Partners } from "./components/Partners";
 import { BecomePartner } from "./components/BecomePartner";
 import AdminDashboard from "./pages/AdminDashboard";
+import Tutorial_page from "./components/Tutorial_page";
 
 /* ================= SCROLL HELPER ================= */
 function ScrollToSection({ id }: { id: string }) {
@@ -159,6 +160,10 @@ export default function App() {
             </>
           }
         />
+
+        {/* Tutorial Page */}
+        <Route path="/tutorials" element={<Tutorial_page />} />
+        
         <Route
           path="/pricing"
           element={

@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
 // Import the image from your local assets folder
-import featureImage from "../assets/Screenshot 2026-01-12 123851.png";
+import featureImage from "./assets/Screenshot 2026-01-12 123851.png";
 
 const featuresList = [
   { label: "Financial & Accounting" },

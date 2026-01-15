@@ -201,10 +201,10 @@ const totalWithGst = Math.round((baseAmount + gstAmount) * 100) / 100;
 {/* Action Buttons */}
 <div className="space-y-3">
   <button
-    onClick={() => window.location.href = DASHBOARD_URL}
+    onClick={() => navigate("/tutorials")}
     className="w-full bg-green-600 text-black py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-green-700 transition"
   >
-    Go to Dashboard
+    Go to Tutorial
     <ArrowRight className="w-5 h-5" />
   </button>
 
