@@ -216,7 +216,12 @@ export function Pricing() {
 
         {/* Footer */}
         <div className="text-center mt-16">
-          
+          <p className="text-gray-500">
+            Need a custom solution?{" "}
+            <a href="#contact" className="text-indigo-600 underline">
+              Contact our sales team
+            </a>
+          </p>
         </div>
       </div>
     </section>

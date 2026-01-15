@@ -91,12 +91,13 @@ export default function App() {
   const LandingPage = (
     <>
       <Navbar
-        onSignInClick={() => setIsLoginModalOpen(true)}
+        onSignInClick={() => setIsLoginModalOpen(true)} 
         onNavigateHome={handleNavigateHome}
         onNavigateToSection={handleNavigateToSection}
         onNavigateToPartners={handleNavigateToPartners}
         currentPage={currentPage}
       />
+
       <TaglineBanner />
       <Hero onStartTrialClick={() => setIsLoginModalOpen(true)} />
 
@@ -279,9 +280,15 @@ export default function App() {
         }}
       />
 
-      {showPrivacyPolicy && <PrivacyPolicy onClose={() => setShowPrivacyPolicy(false)} />}
-      {showTermsOfService && <TermsOfService onClose={() => setShowTermsOfService(false)} />}
-      {showCookiePolicy && <CookiePolicy onClose={() => setShowCookiePolicy(false)} />}
+      {showPrivacyPolicy && (
+        <PrivacyPolicy onClose={() => setShowPrivacyPolicy(false)} />
+      )}
+      {showTermsOfService && (
+        <TermsOfService onClose={() => setShowTermsOfService(false)} />
+      )}
+      {showCookiePolicy && (
+        <CookiePolicy onClose={() => setShowCookiePolicy(false)} />
+      )}
       {showSecurity && <Security onClose={() => setShowSecurity(false)} />}
     </>
   );
