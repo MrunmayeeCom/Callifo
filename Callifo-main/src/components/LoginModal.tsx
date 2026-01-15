@@ -93,7 +93,7 @@ const handleSubmit = async (e: React.FormEvent) => {
           </h2>
           <p className="text-gray-300">
             {isSignUp 
-              ? "Start your 14-day free trial today" 
+              ? "Create a New Account to access the App" 
               : "Sign in to access your account"}
           </p>
         </div>
@@ -186,7 +186,7 @@ const handleSubmit = async (e: React.FormEvent) => {
             type="submit"
             className="w-full px-6 py-3 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 hover:shadow-lg hover:scale-105 transition-all duration-300"
           >
-            {isSignUp ? "Start Free Trial" : "Sign In"}
+            {isSignUp ? "Create Account" : "Sign In"}
           </button>
 
           {isSignUp && (
