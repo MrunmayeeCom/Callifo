@@ -1,14 +1,15 @@
-import { Check, Sparkles, Zap, Crown } from "lucide-react";
+import { Check, Zap, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface PricingPlan {
   id: string;
+  licenseTypeId: string;
   name: string;
   icon: any;
   description: string;
-  price: string | "Custom";
+  price: number;
   period: string;
   features: string[];
   highlighted: boolean;
@@ -16,17 +17,11 @@ interface PricingPlan {
   buttonStyle: string;
 }
 
-const PLAN_ROUTE_MAP: Record<string, string> = {
-  starter: "free",
-  basic: "free",
-  free: "free",
-  pro: "professional",
-  professional: "professional",
-};
+type BillingCycle = "monthly" | "quarterly" | "half-yearly" | "yearly";
 
 // INR formatter 🇮🇳
-const formatINR = (value: string | number) =>
-  `₹${Number(value).toLocaleString("en-IN")}`;
+const formatINR = (value: number) =>
+  `₹${value.toLocaleString("en-IN")}`;
 
 export function Pricing() {
   const navigate = useNavigate();
@@ -34,22 +29,46 @@ export function Pricing() {
 
   const [pricingPlans, setPricingPlans] = useState<PricingPlan[]>([]);
   const [loading, setLoading] = useState(true);
+  const [billingCycle, setBillingCycle] = useState<BillingCycle>("monthly");
+
+  /* ---------------- HELPERS ---------------- */
+
+  const getPrice = (plan: PricingPlan) => {
+    if (plan.price === 0) return 0;
+
+    if (billingCycle === "monthly") return plan.price;
+    if (billingCycle === "quarterly") return plan.price * 3 * 0.95; // 5% discount
+    if (billingCycle === "half-yearly") return plan.price * 6 * 0.90; // 10% discount
+    return plan.price * 12 * 0.80; // 20% discount
+  };
+
+  const getBillingText = () => {
+    if (billingCycle === "monthly") return "/user/month";
+    if (billingCycle === "quarterly") return "/user/quarter";
+    if (billingCycle === "half-yearly") return "/user/6 months";
+    return "/user/year";
+  };
+
+  const getDiscountText = () => {
+    if (billingCycle === "quarterly") return "Save 5%";
+    if (billingCycle === "half-yearly") return "Save 10%";
+    if (billingCycle === "yearly") return "Save 20%";
+    return "";
+  };
 
   // Handle plan CTA click
-  const handlePlanClick = (planName: string) => {
-    const slug = PLAN_ROUTE_MAP[planName.toLowerCase()];
-    if (!slug) return;
-
-    const checkoutPath = `/checkout/${slug}`;
-
+  const handlePlanClick = (planId: string, planName: string) => {
     if (!isLoggedIn) {
       navigate("/", {
-        state: { openLogin: true, redirectTo: checkoutPath },
+        state: { 
+          openLogin: true, 
+          redirectTo: `/checkout/${planId}` 
+        },
       });
       return;
     }
 
-    navigate(checkoutPath);
+    navigate(`/checkout/${planId}`);
   };
 
   // Fetch pricing plans
@@ -57,7 +76,7 @@ export function Pricing() {
     const loadPlans = async () => {
       try {
         const res = await fetch(
-          "https://lisence-system.onrender.com/api/license/licenses-by-product/6958ee26be14694144dfb879",
+          "http://localhost:4000/api/license/public/licenses-by-product/6958ee26be14694144dfb879",
           {
             headers: {
               "x-api-key": "my-secret-key-123",
@@ -74,16 +93,14 @@ export function Pricing() {
             const key = name.toLowerCase();
 
             const isPro = key === "pro" || key === "professional";
-            const isStarter = key === "starter" || key === "basic";
+            const isStarter = key === "starter" || key === "basic" || key === "free";
 
             return {
               id: lic._id,
+              licenseTypeId: lic.licenseType._id,
               name,
-              description: `Best suited for ${name} users`,
-              price:
-                lic.licenseType.price?.amount != null
-                  ? String(lic.licenseType.price.amount)
-                  : "Custom",
+              description: lic.licenseType.description || `Best suited for ${name} users`,
+              price: lic.licenseType.price?.amount ?? 0,
               period: lic.licenseType.price?.billingPeriod ?? "",
               features: Array.isArray(lic.licenseType.features)
                 ? lic.licenseType.features.map(
@@ -92,15 +109,13 @@ export function Pricing() {
                   )
                 : [],
               highlighted: isPro,
-              icon: isStarter ? Zap : isPro ? Sparkles : Crown,
+              icon: isStarter ? Zap : Sparkles,
               gradient: isStarter
                 ? "from-cyan-400 to-blue-500"
-                : isPro
-                ? "from-cyan-400 to-teal-500"
-                : "from-blue-600 to-indigo-600",
+                : "from-cyan-400 to-teal-500",
               buttonStyle: isPro
-                ? "bg-cyan-400 text-white hover:bg-cyan-500 hover:shadow-xl"
-                : "border-2 border-[#003366] text-[#003366] hover:bg-gray-50",
+                ? "bg-cyan-500 text-white hover:bg-cyan-600 hover:shadow-xl"
+                : "border-2 border-cyan-600 text-cyan-700 hover:bg-cyan-50",
             };
           });
 
@@ -145,15 +160,65 @@ export function Pricing() {
             <span>Simple, Transparent Pricing</span>
           </div>
 
-          <h2 className="text-gray-900">
+          <h2 className="text-2xl text-gray-900">
             Choose the Perfect Plan for Your Business
           </h2>
+
+          {/* Billing Cycle Tabs */}
+          <div className="mt-8 flex justify-center">
+            <div className="inline-flex h-auto p-1 bg-gray-100 rounded-lg">
+              <button
+                onClick={() => setBillingCycle("monthly")}
+                className={`px-4 py-2 rounded-md transition-all ${
+                  billingCycle === "monthly"
+                    ? "bg-white shadow-sm text-cyan-700 font-medium"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                Monthly
+              </button>
+              <button
+                onClick={() => setBillingCycle("quarterly")}
+                className={`px-4 py-2 rounded-md transition-all ${
+                  billingCycle === "quarterly"
+                    ? "bg-white shadow-sm text-cyan-700 font-medium"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                Quarterly{" "}
+                <span className="ml-1 text-xs text-green-600 font-medium">-5%</span>
+              </button>
+              <button
+                onClick={() => setBillingCycle("half-yearly")}
+                className={`px-4 py-2 rounded-md transition-all ${
+                  billingCycle === "half-yearly"
+                    ? "bg-white shadow-sm text-cyan-700 font-medium"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                Half-Yearly{" "}
+                <span className="ml-1 text-xs text-green-600 font-medium">-10%</span>
+              </button>
+              <button
+                onClick={() => setBillingCycle("yearly")}
+                className={`px-4 py-2 rounded-md transition-all ${
+                  billingCycle === "yearly"
+                    ? "bg-white shadow-sm text-cyan-700 font-medium"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                Yearly{" "}
+                <span className="ml-1 text-xs text-green-600 font-medium">-20%</span>
+              </button>
+            </div>
+          </div>
         </motion.div>
 
-        {/* Pricing Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* Pricing Cards - 2 Column Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {pricingPlans.map((plan, index) => {
             const Icon = plan.icon;
+            const finalPrice = getPrice(plan);
 
             return (
               <motion.div
@@ -162,52 +227,67 @@ export function Pricing() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ scale: plan.highlighted ? 1 : 1.05, y: -5 }}
-                className={`rounded-2xl p-8 ${
+                className={`relative rounded-2xl p-8 transition-all duration-300 ${
                   plan.highlighted
-                    ? "bg-white shadow-2xl ring-2 ring-cyan-500 scale-105"
-                    : "bg-white shadow-lg hover:shadow-xl"
+                    ? "bg-white shadow-2xl ring-2 ring-cyan-500 scale-105 hover:scale-110"
+                    : "bg-white shadow-lg hover:shadow-xl hover:scale-105"
                 }`}
               >
-                <div
-                  className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${plan.gradient} mb-6`}
-                >
-                  <Icon className="w-6 h-6 text-white" />
+                {plan.highlighted && (
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-cyan-500 text-white px-4 py-1 rounded-full text-sm font-medium">
+                    Most Popular
+                  </div>
+                )}
+
+                <div className="flex items-center gap-3 mb-6">
+                  <div
+                    className={`p-3 rounded-xl bg-gradient-to-br ${plan.gradient}`}
+                  >
+                    <Icon className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl text-gray-900">{plan.name}</h3>
+                  </div>
                 </div>
 
-                <h3 className="text-gray-900 mb-2">{plan.name}</h3>
                 <p className="text-gray-600 mb-6">{plan.description}</p>
 
                 <div className="mb-8">
-                  <span className="text-5xl text-gray-900">
-                    {plan.price === "Custom"
-                      ? "Custom"
-                      : formatINR(plan.price)}
-                  </span>
-                  {plan.period && (
-                    <span className="text-gray-600"> / {plan.period}</span>
+                  <div className="flex items-baseline gap-2">
+                    {plan.price === 0 ? (
+                      <span className="text-3xl text-gray-900">Free</span>
+                    ) : (
+                      <>
+                        <span className="text-3xl text-gray-900">
+                          {formatINR(finalPrice)}
+                        </span>
+                        <span className="text-gray-600">{getBillingText()}</span>
+                      </>
+                    )}
+                  </div>
+
+                  {plan.price > 0 && getDiscountText() && (
+                    <p className="text-sm text-green-600 mt-2 font-medium">
+                      {getDiscountText()}
+                    </p>
                   )}
                 </div>
 
                 <ul className="space-y-4 mb-8">
                   {plan.features.map((feature, idx) => (
                     <li key={idx} className="flex gap-3">
-                      <Check className="w-4 h-4 text-cyan-500 mt-1" />
-                      <span>{feature}</span>
+                      <Check className="w-5 h-5 text-cyan-500 mt-0.5 flex-shrink-0" />
+                      <span className="text-gray-700">{feature}</span>
                     </li>
                   ))}
                 </ul>
 
                 <button
                   type="button"
-                  onClick={() => handlePlanClick(plan.name)}
-                  className={`relative z-20 w-full px-6 py-3 rounded-lg ${plan.buttonStyle}`}
+                  onClick={() => handlePlanClick(plan.id, plan.name)}
+                  className={`w-full px-6 py-3 rounded-lg font-medium transition-all ${plan.buttonStyle}`}
                 >
-                  {["pro", "professional"].includes(
-                    plan.name.toLowerCase()
-                  )
-                    ? "Buy Now"
-                    : "Start Free Trial"}
+                  {plan.price === 0 ? "Start Free Plan" : "Buy Now"}
                 </button>
               </motion.div>
             );
@@ -218,7 +298,7 @@ export function Pricing() {
         <div className="text-center mt-16">
           <p className="text-gray-500">
             Need a custom solution?{" "}
-            <a href="#contact" className="text-indigo-600 underline">
+            <a href="#contact" className="text-cyan-600 hover:underline font-medium">
               Contact our sales team
             </a>
           </p>
