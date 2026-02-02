@@ -2,6 +2,7 @@ import { motion } from "motion/react";
 import { Award, Users, TrendingUp, Globe, CheckCircle, Target } from "lucide-react";
 import { useState } from "react";
 import { submitPartnerApplication } from "../api/partnerProgram";
+
 interface BecomePartnerProps {
   onBackToDirectory: () => void;
 }
@@ -16,22 +17,31 @@ export function BecomePartner({ onBackToDirectory }: BecomePartnerProps) {
     city: "",
     website: "",
     companySize: "",
-    industry: "",
+    partnerType: "",
     experience: "",
-    services: [] as string[],
     message: ""
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Mapping functions to match API requirements
+  const mapPartnerType = (type: string) => {
+    if (type === "distributor") {
+      return "distributor";
+    }
+    // All other types (reseller, implementation, technology, referral) are channel partners
+    return "channel_partner";
+  };
+
   const mapExperience = (exp: string) => {
     switch (exp) {
-      case "0-2":
+      case "0-1":
         return "0-1";
+      case "1-3":
+        return "1-3";
       case "3-5":
         return "3-5";
-      case "6-10":
+      case "5-10":
         return "5-10";
       case "10+":
         return "10+";
@@ -40,16 +50,16 @@ export function BecomePartner({ onBackToDirectory }: BecomePartnerProps) {
     }
   };
 
-  const mapIndustryToBusinessType = (industry: string) => {
-    switch (industry) {
-      case "IT Services":
+  const mapBusinessType = (partnerType: string) => {
+    switch (partnerType) {
+      case "technology":
         return "Technology";
-      case "Consulting":
+      case "reseller":
+        return "Reseller";
+      case "implementation":
         return "Consulting";
-      case "Software Development":
-        return "Technology";
-      case "Telecommunications":
-        return "Technology";
+      case "referral":
+        return "Other";
       default:
         return "Other";
     }
@@ -62,7 +72,7 @@ export function BecomePartner({ onBackToDirectory }: BecomePartnerProps) {
     // Validate required fields
     if (!formData.companyName || !formData.contactName || !formData.email || 
         !formData.phone || !formData.country || !formData.city || 
-        !formData.companySize || !formData.industry || !formData.experience) {
+        !formData.companySize || !formData.partnerType || !formData.experience) {
       alert("Please fill in all required fields");
       setIsSubmitting(false);
       return;
@@ -84,15 +94,15 @@ export function BecomePartner({ onBackToDirectory }: BecomePartnerProps) {
         },
 
         businessDetails: {
-          businessType: mapIndustryToBusinessType(formData.industry),
+          businessType: mapBusinessType(formData.partnerType),
           yearsInBusiness: mapExperience(formData.experience),
           numberOfEmployees: formData.companySize,
           existingClients: 0,
         },
 
         partnershipDetails: {
-          joinAs: "channel_partner", // Default to channel_partner for CallFlow
-          motivation: formData.message || `Services offered: ${formData.services.join(", ")}`,
+          joinAs: mapPartnerType(formData.partnerType),
+          motivation: formData.message || "No additional information provided",
         },
 
         source: "callifo",
@@ -114,9 +124,8 @@ export function BecomePartner({ onBackToDirectory }: BecomePartnerProps) {
         city: "",
         website: "",
         companySize: "",
-        industry: "",
+        partnerType: "",
         experience: "",
-        services: [],
         message: ""
       });
 
@@ -141,15 +150,6 @@ export function BecomePartner({ onBackToDirectory }: BecomePartnerProps) {
     });
   };
 
-  const handleServiceToggle = (service: string) => {
-    setFormData({
-      ...formData,
-      services: formData.services.includes(service)
-        ? formData.services.filter(s => s !== service)
-        : [...formData.services, service]
-    });
-  };
-
   const benefits = [
     {
       icon: <Award className="w-8 h-8" />,
@@ -171,15 +171,6 @@ export function BecomePartner({ onBackToDirectory }: BecomePartnerProps) {
       title: "Global Network",
       description: "Connect with partners worldwide and share best practices"
     }
-  ];
-
-  const serviceOptions = [
-    "Implementation & Setup",
-    "Custom Development",
-    "Integration Services",
-    "Training & Support",
-    "Consulting",
-    "Migration Services"
   ];
 
   return (
@@ -481,20 +472,20 @@ export function BecomePartner({ onBackToDirectory }: BecomePartnerProps) {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-[#003366] mb-2">Industry *</label>
+                <label className="block text-sm font-semibold text-[#003366] mb-2">Partner Type *</label>
                 <select
-                  name="industry"
-                  value={formData.industry}
+                  name="partnerType"
+                  value={formData.partnerType}
                   onChange={handleChange}
                   required
                   className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-[#00bcd4] focus:outline-none transition-colors"
                 >
-                  <option value="">Select industry</option>
-                  <option value="IT Services">IT Services</option>
-                  <option value="Consulting">Consulting</option>
-                  <option value="Software Development">Software Development</option>
-                  <option value="Telecommunications">Telecommunications</option>
-                  <option value="Other">Other</option>
+                  <option value="">Select type</option>
+                  <option value="reseller">Reseller Partner</option>
+                  <option value="distributor">Distributor</option>
+                  <option value="implementation">Implementation Partner</option>
+                  <option value="technology">Technology Partner</option>
+                  <option value="referral">Referral Partner</option>
                 </select>
               </div>
 
@@ -508,28 +499,12 @@ export function BecomePartner({ onBackToDirectory }: BecomePartnerProps) {
                   className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-[#00bcd4] focus:outline-none transition-colors"
                 >
                   <option value="">Select experience</option>
-                  <option value="0-2">0-2 years</option>
+                  <option value="0-1">0-1 years</option>
+                  <option value="1-3">1-3 years</option>
                   <option value="3-5">3-5 years</option>
-                  <option value="6-10">6-10 years</option>
+                  <option value="5-10">5-10 years</option>
                   <option value="10+">10+ years</option>
                 </select>
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-[#003366] mb-3">Services You Can Provide *</label>
-              <div className="grid md:grid-cols-2 gap-3">
-                {serviceOptions.map((service) => (
-                  <label key={service} className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={formData.services.includes(service)}
-                      onChange={() => handleServiceToggle(service)}
-                      className="w-5 h-5 text-[#00bcd4] border-2 border-gray-300 rounded focus:ring-[#00bcd4]"
-                    />
-                    <span className="text-gray-700">{service}</span>
-                  </label>
-                ))}
               </div>
             </div>
 

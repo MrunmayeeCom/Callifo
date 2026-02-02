@@ -44,6 +44,7 @@ export function Checkout({ isOpen, onClose, selectedPlan }: CheckoutProps) {
     "monthly" | "quarterly" | "half-yearly" | "yearly"
   >(cycleFromUrl || "monthly");
   const [useFreeTrial, setUseFreeTrial] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   // Form data state
   const [formData, setFormData] = useState({
@@ -231,7 +232,6 @@ export function Checkout({ isOpen, onClose, selectedPlan }: CheckoutProps) {
   const pricePerUser = currentPlan.pricePerUser ?? 0;
   const userCount = currentPlan.includedUsers;
   const isFreePlan = pricePerUser === 0;
-
   // Calculate monthly base cost (price per user × number of users)
   const monthlyBaseCost = pricePerUser * userCount;
 
@@ -335,10 +335,18 @@ export function Checkout({ isOpen, onClose, selectedPlan }: CheckoutProps) {
       const purchaseRes = await purchaseLicense(purchasePayload);
 
       /* ---- FREE / TRIAL FLOW ---- */
-      if (useFreeTrial || isFreePlan) {
-        navigate("/payment-success?free=true");
-        return;
-      }
+      /* ---- FREE / TRIAL FLOW ---- */
+        if (useFreeTrial || isFreePlan) {
+          // Show success alert
+          alert(
+            isFreePlan 
+              ? "🎉 Success! Your  7-day FREE trial has been activated."
+              : "🎉 Success! Your 7-day FREE trial has been activated."
+          );
+          
+          navigate("/payment-success?free=true");
+          return;
+        }
 
       /* ---- STEP 2: CREATE ORDER ---- */
       const order = await createOrder({
@@ -829,6 +837,27 @@ export function Checkout({ isOpen, onClose, selectedPlan }: CheckoutProps) {
           </div>
         </div>
       </div>
+       {/* Success Modal */}
+                    {showSuccessModal && (
+                      <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50">
+                        <div className="bg-white rounded-2xl p-8 max-w-md mx-4 text-center animate-in fade-in zoom-in">
+                          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <Check className="w-8 h-8 text-green-600" />
+                          </div>
+                          <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                            {isFreePlan ? "Free Plan Activated!" : "7-Day Trial Started!"}
+                          </h3>
+                          <p className="text-gray-600 mb-6">
+                            {isFreePlan 
+                              ? "You now have full access to all Starter features."
+                              : "Enjoy full access to all features. We'll remind you before your trial ends."}
+                          </p>
+                          <div className="text-sm text-gray-500">
+                            Redirecting to dashboard...
+                          </div>
+                        </div>
+                      </div>
+                    )}
     </div>
   );
 }
