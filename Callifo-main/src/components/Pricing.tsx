@@ -64,14 +64,14 @@ export function Pricing() {
       navigate("/", {
         state: { 
           openLogin: true, 
-          redirectTo: `/checkout?plan=${planId}&cycle=${billingCycle}` 
+          redirectTo: `/checkout?plan=${planId}` 
         },
       });
       return;
     }
 
     // Navigate with query params instead of path params
-    navigate(`/checkout?plan=${planId}&cycle=${billingCycle}`);
+    navigate(`/checkout?${planId}`);
   };
 
   // Fetch pricing plans

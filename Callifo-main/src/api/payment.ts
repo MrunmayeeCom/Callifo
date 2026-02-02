@@ -2,7 +2,7 @@ import axios from "axios";
 
 import API from "./AxiosInstance";
 
-type BillingCycle = "monthly" | "quarterly" | "yearly";
+type BillingCycle = "monthly" | "quarterly" |"half-yearly"| "yearly";
 
 export const createOrder = async ({
   userId,

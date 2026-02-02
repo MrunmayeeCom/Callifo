@@ -286,11 +286,11 @@ export function Checkout({ isOpen, onClose, selectedPlan }: CheckoutProps) {
   // Backend billing cycle mapping
   const backendBillingCycleMap: Record<
     "monthly" | "quarterly" | "half-yearly" | "yearly",
-    "monthly" | "yearly"
+    "monthly" | "quarterly" | "half-yearly" | "yearly"
   > = {
     monthly: "monthly",
-    quarterly: "monthly",
-    "half-yearly": "monthly",
+    quarterly: "quarterly",
+    "half-yearly": "half-yearly",
     yearly: "yearly",
   };
 
@@ -325,7 +325,6 @@ export function Checkout({ isOpen, onClose, selectedPlan }: CheckoutProps) {
         licenseId: currentPlan.id,
         licenseTypeId: currentPlan.licenseTypeId,
         billingCycle: backendBillingCycleMap[billingCycle],
-        interval: backendBillingCycleMap[billingCycle],
         trial: useFreeTrial || isFreePlan,
         amount: Math.round(finalAmountDue),
         currency: "INR",
