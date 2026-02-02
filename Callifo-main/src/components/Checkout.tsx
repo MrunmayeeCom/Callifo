@@ -82,7 +82,7 @@ export function Checkout({ isOpen, onClose, selectedPlan }: CheckoutProps) {
     const loadPlans = async () => {
       try {
         const res = await fetch(
-          "http://localhost:4000/api/license/public/licenses-by-product/6958ee26be14694144dfb879",
+          "https://lisence-system.onrender.com/api/license/public/licenses-by-product/6958ee26be14694144dfb879",
           { headers: { "x-api-key": "my-secret-key-123" } }
         );
 

@@ -6,9 +6,15 @@ interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
   onLoginSuccess?: () => void;
+  onNavigateToPricing?: () => void;
 }
 
-export function LoginModal({ isOpen, onClose, onLoginSuccess }: LoginModalProps) {
+export function LoginModal({ 
+  isOpen, 
+  onClose, 
+  onLoginSuccess,
+  onNavigateToPricing 
+}: LoginModalProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
   const [formData, setFormData] = useState({
@@ -19,54 +25,103 @@ export function LoginModal({ isOpen, onClose, onLoginSuccess }: LoginModalProps)
 
   if (!isOpen) return null;
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+  const checkActiveLicense = async (email: string): Promise<boolean> => {
+    try {
+      console.log('Checking active license for:', email);
+      const response = await fetch(
+        `https://lisence-system.onrender.com/api/external/actve-license/${email}?productId=6958ee26be14694144dfb879`,
+        {
+          headers: {
+            "x-api-key": "my-secret-key-123",
+          },
+        }
+      );
 
-  try {
-    if (isSignUp) {
-      const user = await syncCustomer({
-        name: formData.name,
-        email: formData.email,
-        source: "callifo",
-      });
+      console.log('License check response status:', response.status);
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log('License check response data:', data);
+        
+        // Check if activeLicense exists and status is 'active'
+        const hasLicense = data.activeLicense && data.activeLicense.status === 'active';
+        console.log('Has active license:', hasLicense);
+        return hasLicense;
+      }
+      console.log('License check failed - response not ok');
+      return false;
+    } catch (error) {
+      console.error("Error checking active license:", error);
+      return false;
+    }
+  };
+
+  const handlePostLoginActions = async (email: string) => {
+    // Check if user has active license
+    const hasActiveLicense = await checkActiveLicense(email);
+
+    // Close the modal first
+    onLoginSuccess?.();
+    onClose();
+
+    // Small delay to ensure modal closes before action
+    setTimeout(() => {
+      if (hasActiveLicense) {
+        // Redirect to admin dashboard in new tab
+        window.open("https://admin-callifo.onrender.com", "_blank");
+      } else {
+        // Navigate to pricing section
+        onNavigateToPricing?.();
+      }
+    }, 100);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      if (isSignUp) {
+        const user = await syncCustomer({
+          name: formData.name,
+          email: formData.email,
+          source: "callifo",
+        });
+
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            email: formData.email,   
+            name: user.name ?? formData.name ?? null,
+            source: "callifo",
+          })
+        );
+
+        await handlePostLoginActions(formData.email);
+        return;
+      }
+
+      const exists = await checkCustomerExists(formData.email);
+
+      if (!exists) {
+        alert("Account not found. Please create an account.");
+        setIsSignUp(true);
+        return;
+      }
 
       localStorage.setItem(
         "user",
         JSON.stringify({
-          email: formData.email,   
-          name: user.name ?? formData.name ?? null,
+          email: formData.email,
           source: "callifo",
         })
       );
 
-
-      onLoginSuccess?.();
-      return;
+      await handlePostLoginActions(formData.email);
+    } catch (err: any) {
+      console.error(err);
+      alert(err.message || "Something went wrong");
     }
-
-    const exists = await checkCustomerExists(formData.email);
-
-    if (!exists) {
-      alert("Account not found. Please create an account.");
-      setIsSignUp(true);
-      return;
-    }
-
-    localStorage.setItem(
-      "user",
-      JSON.stringify({
-        email: formData.email,
-        source: "callifo",
-      })
-    );
-
-
-    onLoginSuccess?.();
-  } catch (err: any) {
-    console.error(err);
-    alert(err.message || "Something went wrong");
-  }
-};
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({

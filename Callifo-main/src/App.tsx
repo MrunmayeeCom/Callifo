@@ -87,6 +87,21 @@ export default function App() {
     setCurrentPage("partners");
   };
 
+  /* ================= LOGIN SUCCESS HANDLER ================= */
+  const handleLoginSuccess = () => {
+    setIsLoginModalOpen(false);
+    
+    // Trigger navbar refresh by dispatching a custom event
+    window.dispatchEvent(new Event('userLoginStatusChanged'));
+    
+    const redirectTo = location.state?.redirectTo;
+    if (redirectTo) {
+      navigate(redirectTo);
+    } else {
+      // Don't navigate away - LoginModal will handle navigation based on license status
+    }
+  };
+
   /* ================= LANDING PAGE ================= */
   const LandingPage = (
     <>
@@ -249,7 +264,8 @@ export default function App() {
               <LoginModal
                 isOpen={true}
                 onClose={() => navigate(-1)}
-                onLoginSuccess={() => navigate("/")}
+                onLoginSuccess={handleLoginSuccess}
+                onNavigateToPricing={() => handleNavigateToSection("pricing")}
               />
             </>
           }
@@ -257,8 +273,8 @@ export default function App() {
 
         {/* ================= CHECKOUT ================= */}
         <Route
-          path="/checkout/*"
-          element={<Checkout isOpen={true} onClose={() => {}} />}
+          path="/checkout"
+          element={<Checkout isOpen={true} onClose={() => navigate("/")} />}
         />
 
         {/* ================= PAYMENT SUCCESS ================= */}
@@ -272,12 +288,8 @@ export default function App() {
       <LoginModal
         isOpen={isLoginModalOpen}
         onClose={() => setIsLoginModalOpen(false)}
-        onLoginSuccess={() => {
-          setIsLoginModalOpen(false);
-          const redirectTo = location.state?.redirectTo;
-          if (redirectTo) navigate(redirectTo);
-          else navigate("/");
-        }}
+        onLoginSuccess={handleLoginSuccess}
+        onNavigateToPricing={() => handleNavigateToSection("pricing")}
       />
 
       {showPrivacyPolicy && (

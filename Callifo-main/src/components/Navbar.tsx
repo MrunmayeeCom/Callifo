@@ -1,5 +1,5 @@
 import { Phone, Menu, X, Download } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import logo from "./assets/Callifo_logo.png";
 
 interface NavbarProps {
@@ -18,6 +18,78 @@ export function Navbar({
   currentPage,
 }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [hasActiveLicense, setHasActiveLicense] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
+
+  useEffect(() => {
+    checkLoginStatus();
+    
+    // Listen for login status changes
+    const handleLoginStatusChange = () => {
+      checkLoginStatus();
+    };
+    
+    window.addEventListener('userLoginStatusChanged', handleLoginStatusChange);
+    window.addEventListener('storage', handleLoginStatusChange);
+    
+    return () => {
+      window.removeEventListener('userLoginStatusChanged', handleLoginStatusChange);
+      window.removeEventListener('storage', handleLoginStatusChange);
+    };
+  }, []);
+
+  const checkLoginStatus = async () => {
+    const userStr = localStorage.getItem("user");
+    
+    if (userStr) {
+      try {
+        const user = JSON.parse(userStr);
+        setUserEmail(user.email);
+        setIsLoggedIn(true);
+        
+        // Check for active license
+        await checkActiveLicense(user.email);
+      } catch (error) {
+        console.error("Error parsing user data:", error);
+        setIsLoggedIn(false);
+      }
+    } else {
+      setIsLoggedIn(false);
+    }
+  };
+
+  const checkActiveLicense = async (email: string) => {
+    try {
+      console.log('[Navbar] Checking active license for:', email);
+      const response = await fetch(
+        `https://lisence-system.onrender.com/api/external/actve-license/${email}?productId=6958ee26be14694144dfb879`,
+        {
+          headers: {
+            "x-api-key": "my-secret-key-123",
+          },
+        }
+      );
+
+      console.log('[Navbar] License check response status:', response.status);
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('[Navbar] License check response data:', data);
+        
+        // Check if activeLicense exists and status is 'active'
+        const hasLicense = data.activeLicense && data.activeLicense.status === 'active';
+        console.log('[Navbar] Has active license:', hasLicense);
+        setHasActiveLicense(hasLicense);
+      } else {
+        console.log('[Navbar] License check failed - response not ok');
+        setHasActiveLicense(false);
+      }
+    } catch (error) {
+      console.error("[Navbar] Error checking active license:", error);
+      setHasActiveLicense(false);
+    }
+  };
 
   const handleNavClick = (sectionId: string) => {
     setMobileMenuOpen(false);
@@ -32,6 +104,27 @@ export function Navbar({
   const handlePartnersClick = () => {
     setMobileMenuOpen(false);
     onNavigateToPartners();
+  };
+
+  const handleCtaClick = () => {
+    if (!isLoggedIn) {
+      onSignInClick();
+    } else if (hasActiveLicense) {
+      // Redirect to admin dashboard
+      window.open("https://admin-callifo.onrender.com", "_blank");
+    } else {
+      // Navigate to pricing section
+      handleNavClick("pricing");
+    }
+    setMobileMenuOpen(false);
+  };
+
+  const getCtaButtonText = () => {
+    return "Login";
+  };
+
+  const getCtaButtonIcon = () => {
+    return null;
   };
 
   return (
@@ -89,10 +182,11 @@ export function Navbar({
               <div className="text-gray-600 text-sm">We work 24/7</div>
             </div>
             <button
-              onClick={onSignInClick}
-              className="px-6 py-2.5 bg-[#003366] text-white rounded-md hover:bg-[#004080] transition-all duration-300 text-sm font-medium"
+              onClick={handleCtaClick}
+              className="px-6 py-2.5 bg-[#003366] text-white rounded-md hover:bg-[#004080] transition-all duration-300 text-sm font-medium flex items-center"
             >
-              Login
+              {getCtaButtonText()}
+              {getCtaButtonIcon()}
             </button>
           </div>
 
@@ -142,13 +236,11 @@ export function Navbar({
 
               <div className="flex flex-col gap-3 pt-4 border-t border-gray-200">
                 <button
-                  onClick={() => {
-                    onSignInClick();
-                    setMobileMenuOpen(false);
-                  }}
-                  className="w-full px-4 py-2.5 bg-[#003366] text-white rounded-md transition-colors text-center"
+                  onClick={handleCtaClick}
+                  className="w-full px-4 py-2.5 bg-[#003366] text-white rounded-md transition-colors text-center flex items-center justify-center"
                 >
-                  Login
+                  {getCtaButtonText()}
+                  {getCtaButtonIcon()}
                 </button>
               </div>
             </div>

@@ -25,7 +25,7 @@ const formatINR = (value: number) =>
 
 export function Pricing() {
   const navigate = useNavigate();
-  const isLoggedIn = Boolean(localStorage.getItem("accessToken"));
+  const isLoggedIn = Boolean(localStorage.getItem("user"));
 
   const [pricingPlans, setPricingPlans] = useState<PricingPlan[]>([]);
   const [loading, setLoading] = useState(true);
@@ -58,17 +58,20 @@ export function Pricing() {
 
   // Handle plan CTA click
   const handlePlanClick = (planId: string, planName: string) => {
+    console.log('🔵 Selected plan:', planName, 'ID:', planId, 'Cycle:', billingCycle);
+    
     if (!isLoggedIn) {
       navigate("/", {
         state: { 
           openLogin: true, 
-          redirectTo: `/checkout/${planId}` 
+          redirectTo: `/checkout?plan=${planId}&cycle=${billingCycle}` 
         },
       });
       return;
     }
 
-    navigate(`/checkout/${planId}`);
+    // Navigate with query params instead of path params
+    navigate(`/checkout?plan=${planId}&cycle=${billingCycle}`);
   };
 
   // Fetch pricing plans
@@ -76,7 +79,7 @@ export function Pricing() {
     const loadPlans = async () => {
       try {
         const res = await fetch(
-          "http://localhost:4000/api/license/public/licenses-by-product/6958ee26be14694144dfb879",
+          "https://lisence-system.onrender.com/api/license/public/licenses-by-product/6958ee26be14694144dfb879",
           {
             headers: {
               "x-api-key": "my-secret-key-123",
