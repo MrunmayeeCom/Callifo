@@ -1,7 +1,7 @@
 import { motion } from "motion/react";
 import { Award, Users, TrendingUp, Globe, CheckCircle, Target } from "lucide-react";
 import { useState } from "react";
-
+import { submitPartnerApplication } from "../api/partnerProgram";
 interface BecomePartnerProps {
   onBackToDirectory: () => void;
 }
@@ -22,10 +22,116 @@ export function BecomePartner({ onBackToDirectory }: BecomePartnerProps) {
     message: ""
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Mapping functions to match API requirements
+  const mapExperience = (exp: string) => {
+    switch (exp) {
+      case "0-2":
+        return "0-1";
+      case "3-5":
+        return "3-5";
+      case "6-10":
+        return "5-10";
+      case "10+":
+        return "10+";
+      default:
+        return "0-1";
+    }
+  };
+
+  const mapIndustryToBusinessType = (industry: string) => {
+    switch (industry) {
+      case "IT Services":
+        return "Technology";
+      case "Consulting":
+        return "Consulting";
+      case "Software Development":
+        return "Technology";
+      case "Telecommunications":
+        return "Technology";
+      default:
+        return "Other";
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    alert("Thank you for your interest! We'll review your application and get back to you soon.");
+    setIsSubmitting(true);
+
+    // Validate required fields
+    if (!formData.companyName || !formData.contactName || !formData.email || 
+        !formData.phone || !formData.country || !formData.city || 
+        !formData.companySize || !formData.industry || !formData.experience) {
+      alert("Please fill in all required fields");
+      setIsSubmitting(false);
+      return;
+    }
+
+    try {
+      const payload = {
+        contactInformation: {
+          fullName: formData.contactName,
+          email: formData.email,
+          phone: formData.phone,
+        },
+
+        companyInformation: {
+          companyName: formData.companyName,
+          website: formData.website || "",
+          country: formData.country,
+          city: formData.city,
+        },
+
+        businessDetails: {
+          businessType: mapIndustryToBusinessType(formData.industry),
+          yearsInBusiness: mapExperience(formData.experience),
+          numberOfEmployees: formData.companySize,
+          existingClients: 0,
+        },
+
+        partnershipDetails: {
+          joinAs: "channel_partner", // Default to channel_partner for CallFlow
+          motivation: formData.message || `Services offered: ${formData.services.join(", ")}`,
+        },
+
+        source: "callifo",
+      };
+
+      console.log("Submitting partner application:", payload);
+
+      await submitPartnerApplication(payload);
+
+      alert("Thank you for your interest! We'll review your application and get back to you within 48 hours.");
+      
+      // Reset form
+      setFormData({
+        companyName: "",
+        contactName: "",
+        email: "",
+        phone: "",
+        country: "",
+        city: "",
+        website: "",
+        companySize: "",
+        industry: "",
+        experience: "",
+        services: [],
+        message: ""
+      });
+
+    } catch (error: any) {
+      console.error("Partner application failed:", error);
+      console.error("Error response:", error.response?.data);
+      
+      const errorMessage = error.response?.data?.message 
+        || error.message 
+        || "Submission failed. Please try again.";
+      
+      alert(`Application submission failed: ${errorMessage}`);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -442,9 +548,10 @@ export function BecomePartner({ onBackToDirectory }: BecomePartnerProps) {
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <button
                 type="submit"
-                className="flex-1 px-8 py-4 bg-[#00bcd4] text-white rounded-lg hover:bg-[#0097a7] transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
+                disabled={isSubmitting}
+                className="flex-1 px-8 py-4 bg-[#00bcd4] text-white rounded-lg hover:bg-[#0097a7] transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
-                Submit Application
+                {isSubmitting ? "Submitting..." : "Submit Application"}
               </button>
               <button
                 type="button"
