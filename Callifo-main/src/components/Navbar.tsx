@@ -106,6 +106,12 @@ export function Navbar({
     onNavigateToPartners();
   };
 
+  const handleDownloadAPK = () => {
+    const apkUrl = "https://intranet.rajlaxmiworld.com/jj";
+    window.open(apkUrl, "_blank");
+    setMobileMenuOpen(false);
+  };
+
   const handleCtaClick = () => {
     if (!isLoggedIn) {
       onSignInClick();
@@ -177,10 +183,23 @@ export function Navbar({
 
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center gap-4">
+
+            {/* Download APK Button */}
+            <button
+              onClick={handleDownloadAPK}
+              className="border-2 border-[#003366] text-[#003366] hover:bg-[#003366] hover:text-white px-4 py-2 rounded-md font-medium transition-colors flex items-center gap-2"
+            >
+              <Download className="h-4 w-4" />
+              Download APK
+            </button>
+
             <div className="text-right mr-2">
               <div className="text-[#003366] font-semibold">+91 9892440788</div>
               <div className="text-gray-600 text-sm">We work 24/7</div>
             </div>
+            
+            
+            {/* Login Button */}
             <button
               onClick={handleCtaClick}
               className="px-6 py-2.5 bg-[#003366] text-white rounded-md hover:bg-[#004080] transition-all duration-300 text-sm font-medium flex items-center"
@@ -235,6 +254,16 @@ export function Navbar({
               </button>
 
               <div className="flex flex-col gap-3 pt-4 border-t border-gray-200">
+                {/* Mobile Download APK Button */}
+                <button
+                  onClick={handleDownloadAPK}
+                  className="w-full px-4 py-2.5 border-2 border-[#003366] text-[#003366] hover:bg-[#003366] hover:text-white rounded-md transition-colors text-center flex items-center justify-center gap-2"
+                >
+                  <Download className="h-4 w-4" />
+                  Download APK
+                </button>
+
+                {/* Mobile Login Button */}
                 <button
                   onClick={handleCtaClick}
                   className="w-full px-4 py-2.5 bg-[#003366] text-white rounded-md transition-colors text-center flex items-center justify-center"
