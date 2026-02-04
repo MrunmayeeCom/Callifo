@@ -71,7 +71,7 @@ export function Pricing() {
     }
 
     // Navigate with query params instead of path params
-    navigate(`/checkout?${planId}`);
+    navigate(`/checkout?plan=${planId}&cycle=${billingCycle}`);
   };
 
   // Fetch pricing plans
