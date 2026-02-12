@@ -344,7 +344,7 @@ export function Checkout({ isOpen, onClose, selectedPlan }: CheckoutProps) {
               : "🎉 Success! Your 7-day FREE trial has been activated."
           );
           
-          navigate("/payment-success?free=true");
+          navigate(`/payment-success?free=true&userId=${purchaseRes.userId}`);
           return;
         }
 
@@ -387,7 +387,7 @@ export function Checkout({ isOpen, onClose, selectedPlan }: CheckoutProps) {
             razorpay_signature: response.razorpay_signature,
           });
 
-          navigate(`/payment-success?tx=${purchaseRes.transactionId}`);
+          navigate(`/payment-success?tx=${purchaseRes.transactionId}&userId=${purchaseRes.userId}`);
         },
       });
 

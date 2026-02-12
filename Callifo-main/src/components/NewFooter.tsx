@@ -13,7 +13,6 @@ export function NewFooter({ onPrivacyClick, onTermsClick, onCookieClick, onSecur
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         
-
         {/* Divider */}
         <div className="h-px bg-gray-600 mb-10"></div>
 
@@ -49,8 +48,23 @@ export function NewFooter({ onPrivacyClick, onTermsClick, onCookieClick, onSecur
         </div>
 
         {/* Copyright */}
-        <div className="text-center">
+        <div className="text-center mb-4">
           <p className="text-gray-400">© 2025 CallFlow. All rights reserved.</p>
+        </div>
+
+        {/* Powered by Averlon */}
+        <div className="text-center">
+          <p className="text-sm text-white-500">
+            Powered by{' '}
+            <a 
+              href="https://averlonworld.com/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-cyan-400 hover:text-cyan-300 font-semibold transition-colors duration-300"
+            >
+              Averlon
+            </a>
+          </p>
         </div>
       </div>
 

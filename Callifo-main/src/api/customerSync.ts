@@ -6,6 +6,22 @@ interface SyncCustomerPayload {
   name: string;
   email: string;
   source: string;
+  password: string;
+} 
+
+interface LoginPayload {
+  email: string;
+  password: string;
+}
+
+interface LoginResponse {
+  success: boolean;
+  message: string;
+  customer?: {
+    name: string;
+    email: string;
+    customerId: string;
+  };
 }
 
 export const syncCustomer = async (data: SyncCustomerPayload) => {
@@ -34,4 +50,19 @@ export const checkCustomerExists = async (email: string): Promise<boolean> => {
   );
 
   return res.data.exists;
+};
+
+// New login function with password validation
+export const loginCustomer = async (data: LoginPayload): Promise<LoginResponse> => {
+  const res = await API.post(
+    "/api/external/customer-login",
+    data,
+    {
+      headers: {
+        "x-api-key": API_KEY,
+      },
+    }
+  );
+
+  return res.data;
 };

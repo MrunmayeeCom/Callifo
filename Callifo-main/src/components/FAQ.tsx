@@ -229,20 +229,32 @@ export function FAQ() {
         </div>
 
         {/* Contact Support CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-12 text-center p-8 bg-[#003366] rounded-2xl text-white"
-        >
-          <h3 className="text-white mb-2">Still have questions?</h3>
-          <p className="text-gray-300 mb-6">
-            Our support team is here to help you 24/7
+       <div className="mt-16 text-center bg-[#003366] rounded-2xl p-8 sm:p-12">
+          <h3 className="text-2xl sm:text-3xl text-white mb-4">
+            Still have questions?
+          </h3>
+          <p className="text-gray-200 text-lg mb-6 max-w-2xl mx-auto text-white">
+            Our support team is here to help you understand how WorkEye can transform your workforce management
           </p>
-          <p>Call us +91 9892440788</p>
-          <p>Email us at <a href="mailto:support@callflow.com" className="text-cyan-400 hover:text-cyan-300 transition-colors">support@callflow.com</a></p>
-        </motion.div>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <button
+              onClick={() => window.location.href = '/contact-support'}
+              className="inline-flex items-center justify-center px-8 py-4 bg-white text-[#003366] rounded-lg hover:bg-[#00C4CC] hover:text-white transition-colors font-semibold"
+            >
+              Contact Support
+            </button>
+            <a
+              href="#pricing"
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="inline-flex items-center justify-center px-8 py-4 bg-transparent text-white border-2 border-white rounded-lg hover:bg-white hover:text-[#003366] transition-colors font-semibold"
+            >
+              Start Free Trial
+            </a>
+          </div>
+        </div>
       </div>
     </section>
   );

@@ -24,6 +24,7 @@ import { Partners } from "./components/Partners";
 import { BecomePartner } from "./components/BecomePartner";
 import AdminDashboard from "./pages/AdminDashboard";
 import Tutorial_page from "./components/Tutorial_page";
+import { ContactSupportPage } from "./components/ContactSupportPage";
 
 /* ================= SCROLL HELPER ================= */
 function ScrollToSection({ id }: { id: string }) {
@@ -225,6 +226,16 @@ export default function App() {
             </>
           }
         />
+
+          {/* Contact Support Page */}
+      <Route
+        path="/contact-support"
+        element={
+          <ContactSupportPage
+            onBack={() => navigate("/")}
+          />
+        }
+      />
 
         {/* ================= BECOME PARTNER ================= */}
         <Route
