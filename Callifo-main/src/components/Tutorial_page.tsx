@@ -38,7 +38,7 @@ import app_info from "./assets/app_info.png";
 import registered_sim from "./assets/registered_sim.png";
 import dialer from "./assets/dialer.png";
 
-import { TutorialVideo } from './TutorialVideo';
+import { TutorialVideo } from './Tutorialvideo';
 import { NewFooter } from './NewFooter';
 
 const tutorialSections = [
