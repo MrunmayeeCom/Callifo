@@ -26,6 +26,7 @@ export function ContactSupportPage({ onBack }: ContactSupportPageProps) {
       case "demo": return "DEMO_REQUEST";
       case "feature": return "FEATURE_REQUEST";
       case "bug": return "BUG_REPORT";
+      case "custom": return "ENTERPRISE_CUSTOM_PLAN";
       default: return "OTHER";
     }
   };
@@ -42,7 +43,7 @@ export function ContactSupportPage({ onBack }: ContactSupportPageProps) {
       inquiryType: mapInquiryType(formData.type),
       subject: formData.subject,
       message: formData.message,
-      source: "CALLIFO",
+      source: "CALLIFO"as const,
     };
 
     try {
@@ -578,6 +579,7 @@ export function ContactSupportPage({ onBack }: ContactSupportPageProps) {
                       <option value="demo">Demo Request</option>
                       <option value="feature">Feature Request</option>
                       <option value="bug">Bug Report</option>
+                      <option value="custom">Enterprise Custom Plan</option>
                       <option value="other">Other</option>
                     </select>
                   </div>

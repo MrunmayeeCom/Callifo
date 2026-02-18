@@ -31,7 +31,7 @@ export function PrivacyPolicy({ onClose }: PrivacyPolicyProps) {
             <section>
               <h2 className="text-gray-900 mb-4">1. Introduction</h2>
               <p className="text-gray-700 mb-4">
-                Welcome to CallFlow ("we," "our," or "us"). We are committed to protecting your personal information and your right to privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our call management platform.
+                Welcome to Callifo ("we," "our," or "us"). We are committed to protecting your personal information and your right to privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our call management platform.
               </p>
               <p className="text-gray-700">
                 Please read this privacy policy carefully. If you do not agree with the terms of this privacy policy, please do not access the platform.
@@ -142,7 +142,7 @@ export function PrivacyPolicy({ onClose }: PrivacyPolicyProps) {
                 If you have questions or comments about this policy, you may contact us at:
               </p>
               <div className="bg-indigo-50 p-6 rounded-lg space-y-2 text-gray-700">
-                <p><strong>Email:</strong> privacy@callflow.com</p>
+                <p><strong>Email:</strong> privacy@Callifo.com</p>
                 <p><strong>Phone:</strong> +1 (555) 123-4567</p>
                 <p><strong>Address:</strong> 123 Business Ave, San Francisco, CA 94105</p>
               </div>

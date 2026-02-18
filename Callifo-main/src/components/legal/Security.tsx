@@ -31,7 +31,7 @@ export function Security({ onClose }: SecurityProps) {
             <section>
               <h2 className="text-gray-900 mb-4">Our Commitment to Security</h2>
               <p className="text-gray-700 mb-4">
-                At CallFlow, security is not just a feature—it's our foundation. We understand that you trust us with your most valuable business communications, and we take that responsibility seriously. We employ industry-leading security practices to protect your data and ensure the integrity of our platform.
+                At Callifo, security is not just a feature—it's our foundation. We understand that you trust us with your most valuable business communications, and we take that responsibility seriously. We employ industry-leading security practices to protect your data and ensure the integrity of our platform.
               </p>
               <p className="text-gray-700">
                 This document outlines our comprehensive approach to security, including the technical, physical, and administrative measures we implement to safeguard your information.
@@ -144,7 +144,7 @@ export function Security({ onClose }: SecurityProps) {
             <section>
               <h2 className="text-gray-900 mb-4">Compliance & Certifications</h2>
               <p className="text-gray-700 mb-4">
-                CallFlow maintains the following compliance certifications:
+                Callifo maintains the following compliance certifications:
               </p>
               
               <div className="space-y-4">
@@ -231,12 +231,12 @@ export function Security({ onClose }: SecurityProps) {
                 <div className="flex gap-3">
                   <AlertTriangle className="w-6 h-6 text-yellow-600 flex-shrink-0 mt-1" />
                   <div className="space-y-2 text-gray-700">
-                    <p><strong>Use strong, unique passwords</strong> for your CallFlow account</p>
+                    <p><strong>Use strong, unique passwords</strong> for your Callifo account</p>
                     <p><strong>Enable multi-factor authentication</strong> in your account settings</p>
                     <p><strong>Never share your credentials</strong> with anyone</p>
-                    <p><strong>Report suspicious activity</strong> to security@callflow.com immediately</p>
+                    <p><strong>Report suspicious activity</strong> to security@Callifo.com immediately</p>
                     <p><strong>Keep your software updated</strong> including browsers and operating systems</p>
-                    <p><strong>Be cautious of phishing attempts</strong> claiming to be from CallFlow</p>
+                    <p><strong>Be cautious of phishing attempts</strong> claiming to be from Callifo</p>
                   </div>
                 </div>
               </div>
@@ -248,8 +248,8 @@ export function Security({ onClose }: SecurityProps) {
                 We welcome security researchers and users to report potential vulnerabilities:
               </p>
               <div className="bg-violet-50 p-6 rounded-lg space-y-2 text-gray-700">
-                <p><strong>Security Email:</strong> security@callflow.com</p>
-                <p><strong>Bug Bounty Program:</strong> <a href="#" className="text-violet-600 hover:underline">bounty.callflow.com</a></p>
+                <p><strong>Security Email:</strong> security@Callifo.com</p>
+                <p><strong>Bug Bounty Program:</strong> <a href="#" className="text-violet-600 hover:underline">bounty.Callifo.com</a></p>
                 <p><strong>PGP Key:</strong> Available upon request</p>
                 <p className="text-sm pt-2 text-gray-600">
                   Please allow up to 48 hours for initial response to security reports.

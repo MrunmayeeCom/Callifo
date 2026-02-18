@@ -5,6 +5,8 @@ import { purchaseLicense } from "../api/license";
 import { createOrder, verifyPayment } from "../api/payment";
 import { loadRazorpay } from "../utils/loadRazorpay";
 
+type BillingCycle = "monthly" | "quarterly" | "half-yearly" | "yearly";
+
 interface CheckoutPlan {
   id: string;
   licenseTypeId: string;
@@ -14,6 +16,12 @@ interface CheckoutPlan {
   period: string;
   features: any[];
   recommended?: boolean;
+  discountConfig: {
+    monthly: number;
+    quarterly: number;
+    "half-yearly": number;
+    yearly: number;
+  };
 }
 
 interface CheckoutProps {
@@ -188,6 +196,12 @@ export function Checkout({ isOpen, onClose, selectedPlan }: CheckoutProps) {
             period: lic.licenseType.price?.billingPeriod ?? "monthly",
             features: lic.licenseType.features ?? [],
             recommended: lic.licenseType.name.toLowerCase() === "professional",
+            discountConfig: lic.licenseType.discountConfig || {
+              monthly: 0,
+              quarterly: 5,
+              "half-yearly": 10,
+              yearly: 20,
+            },
           };
         });
 
@@ -254,19 +268,8 @@ export function Checkout({ isOpen, onClose, selectedPlan }: CheckoutProps) {
   }
 
   // Calculate discount
-  let discountPercent = 0;
-  let discountAmount = 0;
-
-  if (billingCycle === "quarterly") {
-    discountPercent = 5;
-    discountAmount = subtotal * 0.05;
-  } else if (billingCycle === "half-yearly") {
-    discountPercent = 10;
-    discountAmount = subtotal * 0.10;
-  } else if (billingCycle === "yearly") {
-    discountPercent = 20;
-    discountAmount = subtotal * 0.20;
-  }
+  const discountPercent = currentPlan?.discountConfig?.[billingCycle] ?? 0;
+  const discountAmount = subtotal * (discountPercent / 100);
 
   const priceAfterDiscount = subtotal - discountAmount;
 
@@ -425,12 +428,7 @@ export function Checkout({ isOpen, onClose, selectedPlan }: CheckoutProps) {
   };
 
   const getSavingsPercent = () => {
-    switch (billingCycle) {
-      case "monthly": return 0;
-      case "quarterly": return 5;
-      case "half-yearly": return 10;
-      case "yearly": return 20;
-    }
+    return currentPlan?.discountConfig?.[billingCycle] ?? 0;
   };
 
   /* ===============================
@@ -694,42 +692,31 @@ export function Checkout({ isOpen, onClose, selectedPlan }: CheckoutProps) {
                       >
                         Monthly
                       </button>
-                      <button
-                        type="button"
-                        onClick={() => setBillingCycle("quarterly")}
-                        className={`px-3 py-2 text-xs rounded-lg border transition-all ${
-                          billingCycle === "quarterly"
-                            ? "border-cyan-600 bg-cyan-50 text-cyan-700 font-medium"
-                            : "border-gray-200 text-gray-600 hover:border-gray-300"
-                        }`}
-                      >
-                        Quarterly
-                        <span className="ml-1 text-green-600">-5%</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setBillingCycle("half-yearly")}
-                        className={`px-3 py-2 text-xs rounded-lg border transition-all ${
-                          billingCycle === "half-yearly"
-                            ? "border-cyan-600 bg-cyan-50 text-cyan-700 font-medium"
-                            : "border-gray-200 text-gray-600 hover:border-gray-300"
-                        }`}
-                      >
-                        Half-Yearly
-                        <span className="ml-1 text-green-600">-10%</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setBillingCycle("yearly")}
-                        className={`px-3 py-2 text-xs rounded-lg border transition-all ${
-                          billingCycle === "yearly"
-                            ? "border-cyan-600 bg-cyan-50 text-cyan-700 font-medium"
-                            : "border-gray-200 text-gray-600 hover:border-gray-300"
-                        }`}
-                      >
-                        Yearly
-                        <span className="ml-1 text-green-600">-20%</span>
-                      </button>
+                      {(["quarterly", "half-yearly", "yearly"] as BillingCycle[]).map((cycle) => {
+                        const pct = currentPlan?.discountConfig?.[cycle] ?? 0;
+                        const labels: Record<string, string> = {
+                          quarterly: "Quarterly",
+                          "half-yearly": "Half-Yearly",
+                          yearly: "Yearly",
+                        };
+                        return (
+                          <button
+                            key={cycle}
+                            type="button"
+                            onClick={() => setBillingCycle(cycle)}
+                            className={`px-3 py-2 text-xs rounded-lg border transition-all ${
+                              billingCycle === cycle
+                                ? "border-cyan-600 bg-cyan-50 text-cyan-700 font-medium"
+                                : "border-gray-200 text-gray-600 hover:border-gray-300"
+                            }`}
+                          >
+                            {labels[cycle]}
+                            {pct > 0 && (
+                              <span className="ml-1 text-green-600">-{pct}%</span>
+                            )}
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
 

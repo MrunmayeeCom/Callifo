@@ -49,7 +49,7 @@ export function NewFooter({ onPrivacyClick, onTermsClick, onCookieClick, onSecur
 
         {/* Copyright */}
         <div className="text-center mb-4">
-          <p className="text-gray-400">© 2025 CallFlow. All rights reserved.</p>
+          <p className="text-gray-400">© 2025 Callifo. All rights reserved.</p>
         </div>
 
         {/* Powered by Averlon */}

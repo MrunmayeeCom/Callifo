@@ -15,6 +15,12 @@ interface PricingPlan {
   highlighted: boolean;
   gradient: string;
   buttonStyle: string;
+  discountConfig: {
+    monthly: number;
+    quarterly: number;
+    "half-yearly": number;
+    yearly: number;
+  };
 }
 
 type BillingCycle = "monthly" | "quarterly" | "half-yearly" | "yearly";
@@ -35,11 +41,11 @@ export function Pricing() {
 
   const getPrice = (plan: PricingPlan) => {
     if (plan.price === 0) return 0;
-
-    if (billingCycle === "monthly") return plan.price;
-    if (billingCycle === "quarterly") return plan.price * 3 * 0.95; // 5% discount
-    if (billingCycle === "half-yearly") return plan.price * 6 * 0.90; // 10% discount
-    return plan.price * 12 * 0.80; // 20% discount
+    const months: Record<BillingCycle, number> = {
+      monthly: 1, quarterly: 3, "half-yearly": 6, yearly: 12,
+    };
+    const discountPct = plan.discountConfig?.[billingCycle] ?? 0;
+    return plan.price * months[billingCycle] * (1 - discountPct / 100);
   };
 
   const getBillingText = () => {
@@ -50,10 +56,9 @@ export function Pricing() {
   };
 
   const getDiscountText = () => {
-    if (billingCycle === "quarterly") return "Save 5%";
-    if (billingCycle === "half-yearly") return "Save 10%";
-    if (billingCycle === "yearly") return "Save 20%";
-    return "";
+    const refPlan = pricingPlans.find(p => p.price > 0);
+    const pct = refPlan?.discountConfig?.[billingCycle] ?? 0;
+    return pct > 0 ? `Save ${pct}%` : "";
   };
 
   // Handle plan CTA click
@@ -119,6 +124,12 @@ export function Pricing() {
               buttonStyle: isPro
                 ? "bg-cyan-500 text-white hover:bg-cyan-600 hover:shadow-xl"
                 : "border-2 border-cyan-600 text-cyan-700 hover:bg-cyan-50",
+              discountConfig: lic.licenseType.discountConfig || {
+                monthly: 0,
+                quarterly: 5,
+                "half-yearly": 10,
+                yearly: 20,
+              },
             };
           });
 
@@ -170,49 +181,32 @@ export function Pricing() {
           {/* Billing Cycle Tabs */}
           <div className="mt-8 flex justify-center">
             <div className="inline-flex h-auto p-1 bg-gray-100 rounded-lg">
-              <button
-                onClick={() => setBillingCycle("monthly")}
-                className={`px-4 py-2 rounded-md transition-all ${
-                  billingCycle === "monthly"
-                    ? "bg-white shadow-sm text-cyan-700 font-medium"
-                    : "text-gray-600 hover:text-gray-900"
-                }`}
-              >
-                Monthly
-              </button>
-              <button
-                onClick={() => setBillingCycle("quarterly")}
-                className={`px-4 py-2 rounded-md transition-all ${
-                  billingCycle === "quarterly"
-                    ? "bg-white shadow-sm text-cyan-700 font-medium"
-                    : "text-gray-600 hover:text-gray-900"
-                }`}
-              >
-                Quarterly{" "}
-                <span className="ml-1 text-xs text-green-600 font-medium">-5%</span>
-              </button>
-              <button
-                onClick={() => setBillingCycle("half-yearly")}
-                className={`px-4 py-2 rounded-md transition-all ${
-                  billingCycle === "half-yearly"
-                    ? "bg-white shadow-sm text-cyan-700 font-medium"
-                    : "text-gray-600 hover:text-gray-900"
-                }`}
-              >
-                Half-Yearly{" "}
-                <span className="ml-1 text-xs text-green-600 font-medium">-10%</span>
-              </button>
-              <button
-                onClick={() => setBillingCycle("yearly")}
-                className={`px-4 py-2 rounded-md transition-all ${
-                  billingCycle === "yearly"
-                    ? "bg-white shadow-sm text-cyan-700 font-medium"
-                    : "text-gray-600 hover:text-gray-900"
-                }`}
-              >
-                Yearly{" "}
-                <span className="ml-1 text-xs text-green-600 font-medium">-20%</span>
-              </button>
+              {(["monthly", "quarterly", "half-yearly", "yearly"] as BillingCycle[]).map((cycle) => {
+                const refPlan = pricingPlans.find(p => p.price > 0);
+                const pct = refPlan?.discountConfig?.[cycle] ?? 0;
+                const labels: Record<string, string> = {
+                  monthly: "Monthly",
+                  quarterly: "Quarterly",
+                  "half-yearly": "Half-Yearly",
+                  yearly: "Yearly",
+                };
+                return (
+                  <button
+                    key={cycle}
+                    onClick={() => setBillingCycle(cycle)}
+                    className={`px-4 py-2 rounded-md transition-all ${
+                      billingCycle === cycle
+                        ? "bg-white shadow-sm text-cyan-700 font-medium"
+                        : "text-gray-600 hover:text-gray-900"
+                    }`}
+                  >
+                    {labels[cycle]}{" "}
+                    {pct > 0 && (
+                      <span className="ml-1 text-xs text-green-600 font-medium">-{pct}%</span>
+                    )}
+                  </button>
+                );
+              })}
             </div>
           </div>
         </motion.div>

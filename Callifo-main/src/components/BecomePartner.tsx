@@ -159,7 +159,7 @@ export function BecomePartner({ onBackToDirectory }: BecomePartnerProps) {
     {
       icon: <Users className="w-8 h-8" />,
       title: "Access to Leads",
-      description: "Get qualified leads from businesses actively looking for CallFlow solutions"
+      description: "Get qualified leads from businesses actively looking for Callifo solutions"
     },
     {
       icon: <TrendingUp className="w-8 h-8" />,
@@ -189,7 +189,7 @@ export function BecomePartner({ onBackToDirectory }: BecomePartnerProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            Become a CallFlow Partner
+            Become a Callifo Partner
           </motion.h1>
           <motion.p 
             className="text-xl text-gray-200 max-w-3xl mx-auto"
@@ -260,7 +260,7 @@ export function BecomePartner({ onBackToDirectory }: BecomePartnerProps) {
             <h2 className="text-3xl font-bold text-[#003366]">A product people fall in love with</h2>
           </div>
           <p className="text-gray-700 text-lg leading-relaxed mb-8">
-            CallFlow is more than just a call management system – it's a complete business transformation platform. Our partners help 
+            Callifo is more than just a call management system – it's a complete business transformation platform. Our partners help 
             organizations unlock the full potential of our solution through expert implementation, customization, and ongoing support. 
             Join our ecosystem and be part of revolutionizing how businesses communicate.
           </p>

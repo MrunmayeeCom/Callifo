@@ -34,7 +34,7 @@ export function CookiePolicy({ onClose }: CookiePolicyProps) {
                 Cookies are small text files that are placed on your computer or mobile device when you visit a website. They are widely used to make websites work more efficiently and provide information to website owners.
               </p>
               <p className="text-gray-700">
-                CallFlow uses cookies and similar tracking technologies to track activity on our service and store certain information to provide you with a better, faster, and safer experience.
+                Callifo uses cookies and similar tracking technologies to track activity on our service and store certain information to provide you with a better, faster, and safer experience.
               </p>
             </section>
 
@@ -174,7 +174,7 @@ export function CookiePolicy({ onClose }: CookiePolicyProps) {
                 If you have any questions about our use of cookies, please contact us:
               </p>
               <div className="bg-teal-50 p-6 rounded-lg space-y-2 text-gray-700">
-                <p><strong>Email:</strong> privacy@callflow.com</p>
+                <p><strong>Email:</strong> privacy@Callifo.com</p>
                 <p><strong>Phone:</strong> +1 (555) 123-4567</p>
                 <p><strong>Address:</strong> 123 Business Ave, San Francisco, CA 94105</p>
               </div>

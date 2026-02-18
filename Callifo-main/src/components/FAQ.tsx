@@ -7,15 +7,15 @@ const faqCategories = [
     category: "General",
     questions: [
       {
-        question: "What is CallFlow and how does it work?",
-        answer: "CallFlow is an AI-powered call management system that streamlines your customer communication. It uses intelligent routing, real-time analytics, and seamless integrations to help your team handle calls more efficiently and effectively."
+        question: "What is Callifo and how does it work?",
+        answer: "Callifo is an AI-powered call management system that streamlines your customer communication. It uses intelligent routing, real-time analytics, and seamless integrations to help your team handle calls more efficiently and effectively."
       },
       {
         question: "Do I need to install any software?",
-        answer: "No installation required! CallFlow is a cloud-based solution that works directly in your web browser. Simply sign up, configure your settings, and you're ready to start managing calls."
+        answer: "No installation required! Callifo is a cloud-based solution that works directly in your web browser. Simply sign up, configure your settings, and you're ready to start managing calls."
       },
       {
-        question: "Can I try CallFlow before purchasing?",
+        question: "Can I try Callifo before purchasing?",
         answer: "Yes! We offer a 14-day free trial with full access to all features. No credit card required to start your trial."
       },
       {
@@ -28,20 +28,20 @@ const faqCategories = [
     category: "Technical",
     questions: [
       {
-        question: "What integrations does CallFlow support?",
-        answer: "CallFlow integrates with popular CRM systems (Salesforce, HubSpot), helpdesk platforms (Zendesk, Freshdesk), communication tools (Slack, Microsoft Teams), and many more. We also offer a REST API for custom integrations."
+        question: "What integrations does Callifo support?",
+        answer: "Callifo integrates with popular CRM systems (Salesforce, HubSpot), helpdesk platforms (Zendesk, Freshdesk), communication tools (Slack, Microsoft Teams), and many more. We also offer a REST API for custom integrations."
       },
       {
-        question: "Is my data secure with CallFlow?",
+        question: "Is my data secure with Callifo?",
         answer: "Absolutely. We use bank-level encryption (256-bit SSL), are PCI compliant, and follow strict security protocols. All data is encrypted both in transit and at rest. We're also GDPR and HIPAA compliant."
       },
       {
         question: "What are the system requirements?",
-        answer: "CallFlow works on any modern web browser (Chrome, Firefox, Safari, Edge). For the best experience, we recommend using the latest version of your browser. Mobile apps are available for iOS and Android."
+        answer: "Callifo works on any modern web browser (Chrome, Firefox, Safari, Edge). For the best experience, we recommend using the latest version of your browser. Mobile apps are available for iOS and Android."
       },
       {
         question: "Do you offer API access?",
-        answer: "Yes, all Professional and Enterprise plans include full API access. Our comprehensive API documentation makes it easy to integrate CallFlow with your existing systems and workflows."
+        answer: "Yes, all Professional and Enterprise plans include full API access. Our comprehensive API documentation makes it easy to integrate Callifo with your existing systems and workflows."
       }
     ]
   },
@@ -129,7 +129,7 @@ export function FAQ() {
             Got Questions? We've Got Answers
           </h2>
           <p className="text-gray-600">
-            Find answers to common questions about CallFlow and our services
+            Find answers to common questions about Callifo and our services
           </p>
         </motion.div>
 

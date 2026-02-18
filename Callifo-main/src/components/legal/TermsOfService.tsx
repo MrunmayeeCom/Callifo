@@ -31,7 +31,7 @@ export function TermsOfService({ onClose }: TermsOfServiceProps) {
             <section>
               <h2 className="text-gray-900 mb-4">1. Agreement to Terms</h2>
               <p className="text-gray-700 mb-4">
-                These Terms of Service constitute a legally binding agreement between you and CallFlow ("Company," "we," "us," or "our") concerning your access to and use of our call management platform and services.
+                These Terms of Service constitute a legally binding agreement between you and Callifo ("Company," "we," "us," or "our") concerning your access to and use of our call management platform and services.
               </p>
               <p className="text-gray-700">
                 By accessing or using our services, you agree that you have read, understood, and agree to be bound by these Terms. If you do not agree, you are not authorized to access or use our services.
@@ -93,7 +93,7 @@ export function TermsOfService({ onClose }: TermsOfServiceProps) {
             <section>
               <h2 className="text-gray-900 mb-4">5. Intellectual Property Rights</h2>
               <p className="text-gray-700 mb-4">
-                The service and its original content, features, and functionality are owned by CallFlow and are protected by international copyright, trademark, patent, trade secret, and other intellectual property laws.
+                The service and its original content, features, and functionality are owned by Callifo and are protected by international copyright, trademark, patent, trade secret, and other intellectual property laws.
               </p>
               <p className="text-gray-700">
                 You may not copy, modify, distribute, sell, or lease any part of our services without our express written permission.
@@ -116,7 +116,7 @@ export function TermsOfService({ onClose }: TermsOfServiceProps) {
             <section>
               <h2 className="text-gray-900 mb-4">7. Limitation of Liability</h2>
               <p className="text-gray-700 mb-4">
-                To the maximum extent permitted by law, CallFlow shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation:
+                To the maximum extent permitted by law, Callifo shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation:
               </p>
               <ul className="list-disc list-inside space-y-2 text-gray-700">
                 <li>Loss of profits, data, or use</li>
@@ -129,7 +129,7 @@ export function TermsOfService({ onClose }: TermsOfServiceProps) {
             <section>
               <h2 className="text-gray-900 mb-4">8. Indemnification</h2>
               <p className="text-gray-700">
-                You agree to defend, indemnify, and hold harmless CallFlow and its officers, directors, employees, and agents from any claims, damages, obligations, losses, liabilities, costs, or debt arising from your use of the service or violation of these Terms.
+                You agree to defend, indemnify, and hold harmless Callifo and its officers, directors, employees, and agents from any claims, damages, obligations, losses, liabilities, costs, or debt arising from your use of the service or violation of these Terms.
               </p>
             </section>
 
@@ -148,7 +148,7 @@ export function TermsOfService({ onClose }: TermsOfServiceProps) {
             <section>
               <h2 className="text-gray-900 mb-4">10. Governing Law</h2>
               <p className="text-gray-700">
-                These Terms shall be governed by and construed in accordance with the laws of the State of California, United States, without regard to its conflict of law provisions.
+                These Terms shall be governed by and construed in accordance with the laws of the State of Callifornia, United States, without regard to its conflict of law provisions.
               </p>
             </section>
 
@@ -165,7 +165,7 @@ export function TermsOfService({ onClose }: TermsOfServiceProps) {
                 If you have any questions about these Terms, please contact us:
               </p>
               <div className="bg-coral-50 p-6 rounded-lg space-y-2 text-gray-700">
-                <p><strong>Email:</strong> legal@callflow.com</p>
+                <p><strong>Email:</strong> legal@Callifo.com</p>
                 <p><strong>Phone:</strong> +1 (555) 123-4567</p>
                 <p><strong>Address:</strong> 123 Business Ave, San Francisco, CA 94105</p>
               </div>
