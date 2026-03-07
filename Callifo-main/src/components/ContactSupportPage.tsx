@@ -425,8 +425,8 @@ export function ContactSupportPage({ onBack }: ContactSupportPageProps) {
                   <span>📧</span>
                   <div>
                     <div className="contact-info-label">Email</div>
-                    <a href="mailto:support@callifo.com" className="contact-info-value">
-                      support@callifo.com
+                    <a href="mailto:info@averlonworrld.com" className="contact-info-value">
+                      info@averlonworrld.com
                     </a>
                   </div>
                 </div>
@@ -434,8 +434,8 @@ export function ContactSupportPage({ onBack }: ContactSupportPageProps) {
                   <span>📞</span>
                   <div>
                     <div className="contact-info-label">Phone</div>
-                    <a href="tel:+18001234567" className="contact-info-value">
-                      +1 (800) 123-4567
+                    <a href="tel:+919892440788" className="contact-info-value">
+                      +91 98924 40788
                     </a>
                   </div>
                 </div>
@@ -458,8 +458,8 @@ export function ContactSupportPage({ onBack }: ContactSupportPageProps) {
                   <span>📧</span>
                   <div>
                     <div className="contact-info-label">Email</div>
-                    <a href="mailto:sales@callifo.com" className="contact-info-value">
-                      sales@callifo.com
+                    <a href="mailto:info@averlonworrld.com" className="contact-info-value">
+                      info@averlonworrld.com
                     </a>
                   </div>
                 </div>
@@ -467,8 +467,8 @@ export function ContactSupportPage({ onBack }: ContactSupportPageProps) {
                   <span>📞</span>
                   <div>
                     <div className="contact-info-label">Phone</div>
-                    <a href="tel:+18001234568" className="contact-info-value">
-                      +1 (800) 123-4568
+                    <a href="tel:+919892440788" className="contact-info-value">
+                      +91 98924 40788
                     </a>
                   </div>
                 </div>
@@ -488,10 +488,9 @@ export function ContactSupportPage({ onBack }: ContactSupportPageProps) {
                 </div>
                 <h3 className="card-title">Office Location</h3>
                 <p className="contact-info-value" style={{lineHeight: '1.6'}}>
-                  Callifo Headquarters<br />
-                  123 Business Ave<br />
-                  San Francisco, CA 94105<br />
-                  United States
+                  5th Floor, Lodha Supremus - II, Phase - II, Unit No, A. 533,<br /> 
+                  Road No. 22, Wagle Industrial Estate,<br /> 
+                  Thane West, Maharashtra 400604
                 </p>
               </div>
             </div>
