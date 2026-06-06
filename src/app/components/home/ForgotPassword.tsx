@@ -26,6 +26,7 @@ export default function ForgotPassword() {
   const [email, setEmail]     = useState("");
   const [loading, setLoading] = useState(false);
   const [sent, setSent]       = useState(false);
+  const [error, setError]     = useState("");
 
   const canSubmit = email.trim().length > 0;
 
@@ -33,21 +34,14 @@ export default function ForgotPassword() {
     e.preventDefault();
     if (!canSubmit || loading) return;
     setLoading(true);
+    setError("");
     localStorage.removeItem("user");
 
     try {
       // 1. Verify account exists in LMS
-      let exists = false;
-      try {
-        exists = await checkCustomerExists(email.trim());
-      } catch (checkErr: any) {
-        console.error("checkCustomerExists failed:", checkErr);
-        // If the LMS check itself throws (network/API error), skip it and proceed to send email
-        exists = true;
-      }
-
+      const exists = await checkCustomerExists(email.trim());
       if (!exists) {
-        toast.error("No account found with this email.");
+        setError("No account found with this email address.");
         setLoading(false);
         return;
       }
@@ -98,7 +92,7 @@ export default function ForgotPassword() {
       setSent(true);
     } catch (err: any) {
       console.error("ForgotPassword error:", err);
-      toast.error(
+      setError(
         err?.message
           ? `Error: ${err.message}`
           : "Could not send reset email. Please contact info@averlonworld.com"
@@ -420,6 +414,28 @@ export default function ForgotPassword() {
                   transition={{ duration: 0.25 }}
                 >
                   <form onSubmit={handleSubmit}>
+                    {error && (
+                      <div style={{
+                        background: "rgba(239,68,68,0.07)",
+                        border: "1px solid rgba(239,68,68,0.22)",
+                        borderRadius: 11,
+                        padding: "11px 14px",
+                        marginBottom: "1rem",
+                        fontSize: 12.5,
+                        color: "#dc2626",
+                        fontWeight: 500,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 7,
+                      }}>
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+                          <circle cx="12" cy="12" r="10" />
+                          <line x1="12" y1="8" x2="12" y2="12" />
+                          <line x1="12" y1="16" x2="12.01" y2="16" />
+                        </svg>
+                        {error}
+                      </div>
+                    )}
                     <div className="fp-field">
                       <label className="fp-label" htmlFor="fp-email">Email address</label>
                       <div className="fp-input-wrap">
