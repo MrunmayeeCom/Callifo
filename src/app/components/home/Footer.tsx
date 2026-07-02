@@ -302,10 +302,11 @@ export function Footer() {
           <div className="footer-bottom">
             <p className="footer-copy">© {new Date().getFullYear()} Callifo. All rights reserved. Powered by Averlon.</p>
             <div className="footer-legal">
-              <button onClick={() => setPrivacyOpen(true)}>Privacy Policy</button>
+              <button onClick={() => navigate("/privacy-policy")}>Privacy Policy</button>
               <button onClick={() => setTermsOpen(true)}>Terms of Service</button>
               <button onClick={() => setCookieOpen(true)}>Cookie Policy</button>
               <button onClick={() => setSecurityOpen(true)}>Security</button>
+              <button onClick={() => navigate("/eula")}>EULA</button>
             </div>
           </div>
 
