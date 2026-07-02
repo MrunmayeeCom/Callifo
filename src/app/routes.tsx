@@ -9,6 +9,8 @@ import { Checkout } from "./components/home/Checkout";
 import { Success } from "./components/home/Success";
 import ForgotPassword from "./components/home/ForgotPassword";
 import ResetPassword from "./components/home/ResetPassword";
+import PrivacyPolicyPage from "./components/home/PrivacyPolicyPage";
+import EulaPage from "./components/home/EulaPage";
 
 function ContactPage() {
   const navigate = useNavigate();
@@ -59,5 +61,13 @@ export const router = createBrowserRouter([
    {
     path: "/reset-password",
     Component: ResetPassword,
+  },
+  {
+    path: "/privacy-policy",
+    Component: PrivacyPolicyPage,
+  },
+  {
+    path: "/eula",
+    Component: EulaPage,
   },
 ]);
